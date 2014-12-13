@@ -1,5 +1,0 @@
-# git ignore file
-*.suo
-*.cache
-Fundamental Algorithms\obj\Debug*/
-*.suo
