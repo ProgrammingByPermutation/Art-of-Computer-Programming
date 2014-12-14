@@ -10,6 +10,16 @@ namespace Fundamental_Algorithms.Basic_Concepts
     public class Permutation
     {
         /// <summary>
+        /// The unique notation of the cycle form.
+        /// </summary>
+        public string CanonicalForm { get; private set; }
+
+        /// <summary>
+        /// The unique notation of the cycle form with parenthesis.
+        /// </summary>
+        public string CanonicalFormNoParen { get; private set; }
+
+        /// <summary>
         /// The permutation in cycle form. Ex: (abc)(de)(fg)
         /// </summary>
         public string CycleForm { get; private set; }
@@ -28,6 +38,12 @@ namespace Fundamental_Algorithms.Basic_Concepts
             }
 
             CycleForm = cycleForm;
+            CanonicalForm = ToCanonicalForm(cycleForm);
+
+            // Ensure conversion was successful
+            if (CanonicalForm != null) {
+                CanonicalFormNoParen = CanonicalForm.Replace("(", "").Replace(")", "");
+            }
         }
 
         /// <summary>
@@ -43,6 +59,71 @@ namespace Fundamental_Algorithms.Basic_Concepts
             }
 
             return new Permutation(Multiply(left.CycleForm.Trim() + right.CycleForm.Trim()));
+        }
+
+        /// <summary>
+        /// Converts permutation from its cycle form representation to a unique
+        /// canonical form representation.
+        /// </summary>
+        /// <param name="cycleForm">The cycle form representation of the permutation.</param>
+        /// <returns>The canonical representation of the permutation, null if unsuccessful.</returns>
+        public static string ToCanonicalForm(string cycleForm) {
+            if (null == cycleForm) {
+                return null;
+            }
+
+            // Get rid of the first ( so we can split on it. 
+            // Remove all of the ), they'll just get in the way.
+            string canonicalForm = cycleForm.TrimStart('(').Replace(")", "");
+
+            // Split each cycle
+            string[] cycles = canonicalForm.Split('(');
+
+            // Put it into a form we can use
+            List<char[]> cycleList = new List<char[]>(cycles.Length);
+            cycleList.AddRange(cycles.Select(t => (null != t) ? t.ToArray() : null));
+
+            // Step A. Write all the singletons explicitly. (We do this anyway,
+            // so there is no additional processing)
+
+            // Step B. Within each cycle, put the smallest number first.
+            foreach (var currCycle in cycleList) {
+                if (null == currCycle) {
+                    // Something went wrong
+                    return null;
+                }
+
+                // Find the smallest number
+                int indexOfSmallest = 0;
+                char smallest = char.MaxValue;
+                for (int i = 0; i < currCycle.Length; i++) {
+                    char currChar = currCycle[i];
+                    if (currChar < smallest) {
+                        smallest = currChar;
+                        indexOfSmallest = i;
+                    }
+                }
+
+                // Left shift everything
+                if (indexOfSmallest > 0) {
+                    int offset = indexOfSmallest % currCycle.Length;
+
+                    if (offset < 0)
+                        offset = currCycle.Length + offset;
+
+                    char[] temp = new char[offset];
+                    Array.Copy(currCycle, temp, offset);
+                    Array.Copy(currCycle, offset, currCycle, 0, currCycle.Length - offset);
+                    Array.Copy(temp, 0, currCycle, currCycle.Length - offset, temp.Length);
+                }
+            }
+
+            // Step C. Order the cycles in decreasing order of the first number 
+            // in the cycle.
+            cycleList = new List<char[]>(cycleList.OrderByDescending(c => (null != c && c.Length > 0) ? c[0] : -1));
+
+            // Join them together again
+            return "(" + string.Join(")(", cycleList.Select(c => new string(c))) + ")";
         }
 
         /// <summary>
