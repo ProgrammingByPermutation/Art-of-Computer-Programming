@@ -65,6 +65,9 @@ namespace Fundamental_Algorithms.Basic_Concepts
         /// Converts permutation from its cycle form representation to a unique
         /// canonical form representation.
         /// </summary>
+        /// <remarks>
+        /// Section 1.3.3 Applications to Permutations
+        /// </remarks>
         /// <param name="cycleForm">The cycle form representation of the permutation.</param>
         /// <returns>The canonical representation of the permutation, null if unsuccessful.</returns>
         public static string ToCanonicalForm(string cycleForm) {
@@ -130,9 +133,10 @@ namespace Fundamental_Algorithms.Basic_Concepts
         /// Multiplies a permutation in cycle form.
         /// </summary>
         /// <remarks>
-        /// Expected form (abc)(de)(fg).
+        /// Section 1.3.3 Applications to Permutations: Algorithm A
         /// </remarks>
-        /// <param name="cycleForm">A series of permutations to multiply in cycle form.</param>
+        /// <param name="cycleForm">A series of permutations to multiply in cycle form.
+        /// Expected form (abc)(de)(fg).</param>
         /// <returns>The product of a series of permutations in cycle form.</returns>
         public static string Multiply(string cycleForm) {
             // Sanity check
@@ -230,6 +234,9 @@ namespace Fundamental_Algorithms.Basic_Concepts
         /// <summary>
         /// Returns the inverse of a permutation.
         /// </summary>
+        /// <remarks>
+        /// Section 1.3.3 Applications to Permutations: Algorithm I
+        /// </remarks>
         /// <param name="intArray">The array to invert.</param>
         /// <returns>The inverted array, null if unsuccessful.</returns>
         public static int[] InverseIntArrayI(int[] intArray) {
@@ -285,6 +292,9 @@ namespace Fundamental_Algorithms.Basic_Concepts
         /// <summary>
         /// Returns the inverse of a permutation.
         /// </summary>
+        /// <remarks>
+        /// Section 1.3.3 Applications to Permutations: Algorithm J
+        /// </remarks>
         /// <param name="intArray">The array to invert.</param>
         /// <returns>The inverted array, null if unsuccessful.</returns>
         public static int[] InverseIntArrayJ(int[] intArray) {
