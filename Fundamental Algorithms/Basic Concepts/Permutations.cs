@@ -47,17 +47,19 @@ namespace Fundamental_Algorithms.Basic_Concepts
                 }
             }
 
-            // A2. Searching from left to right, find the first untagged element of the input.
-            // (If all elements are tagged, the algorithm terminates.) 
+            // Declare the variables we will use A2 -> A6
             List<char> output = new List<char>();
             char START = default(char), CURRENT = default(char);
-            bool startWasSet = false, currentWasSet = false;
+            bool doA2 = true, doA3 = true;
+
+            // A2. Searching from left to right, find the first untagged element of the input.
+            // (If all elements are tagged, the algorithm terminates.) 
             while (!taggedEntries.Aggregate(true, (b, b1) => b && b1)) {
-                bool done = false;
-                while (!done) {
+                bool scanningFormula = true;
+                while (scanningFormula) {
                     for (int i = 0; i < cycleArray.Length; i++) {
                         // A2. Set START equal to it; output a left parenthesis; output the element; and tag it.
-                        if (!startWasSet) {
+                        if (doA2) {
                             if (taggedEntries[i]) {
                                 continue;
                             }
@@ -65,14 +67,14 @@ namespace Fundamental_Algorithms.Basic_Concepts
                             START = cycleArray[i];
                             output.AddRange(new[] {'(', START});
                             taggedEntries[i] = true;
-                            startWasSet = true;
+                            doA2 = false;
                             continue;
                         }
 
                         // A3. Set CURRENT equal to the next element of the formula.
-                        if (!currentWasSet) {
+                        if (doA3) {
                             CURRENT = cycleArray[i];
-                            currentWasSet = true;
+                            doA3 = false;
                             continue;
                         }
 
@@ -80,7 +82,7 @@ namespace Fundamental_Algorithms.Basic_Concepts
                         // element equal to CURRENT; in the latter case, tag it and go back to step A3.
                         if (cycleArray[i] == CURRENT) {
                             taggedEntries[i] = true;
-                            currentWasSet = false;
+                            doA3 = true;
                         }
                     }
 
@@ -89,14 +91,14 @@ namespace Fundamental_Algorithms.Basic_Concepts
                     // in the output).
                     if (CURRENT != START) {
                         output.Add(CURRENT);
-                        startWasSet = true;
-                        currentWasSet = true;
+                        doA2 = false;
+                        doA3 = false;
                     }
                     else {
                         output.Add(')');
-                        startWasSet = false;
-                        currentWasSet = false;
-                        done = true;
+                        doA2 = true;
+                        doA3 = true;
+                        scanningFormula = false;
                     }
                 }
             }
