@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Fundamental_Algorithms.Basic_Concepts
 {
+    /// <summary>
+    /// A class of algorithms relating to permutations.
+    /// </summary>
     public class Permutations
     {
         /// <summary>
@@ -13,6 +16,7 @@ namespace Fundamental_Algorithms.Basic_Concepts
         /// Expected form (abc)(de)(fg).
         /// </remarks>
         /// <param name="cycleForm">A series of permutations to multiply in cycle form.</param>
+        /// <returns>The product of a series of permutations in cycle form.</returns>
         public static string Multiply(string cycleForm) {
             // Sanity check
             if (string.IsNullOrWhiteSpace(cycleForm)) {
