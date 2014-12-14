@@ -21,7 +21,6 @@ namespace Fundamental_Algorithms.Basic_Concepts
 
             // Convert to a format we can manipulate
             char[] cycleArray = cycleForm.ToCharArray();
-            List<char> output = new List<char>();
 
             // A1. Tag all left parenthesis, and replace each right parenthesis
             // by a tagged copy of the input symbol that follows its matching
@@ -50,9 +49,10 @@ namespace Fundamental_Algorithms.Basic_Concepts
 
             // A2. Searching from left to right, find the first untagged element of the input.
             // (If all elements are tagged, the algorithm terminates.) 
+            List<char> output = new List<char>();
             char START = default(char), CURRENT = default(char);
             bool startWasSet = false, currentWasSet = false;
-            while(!taggedEntries.Aggregate(true, (b, b1) => b && b1)) {
+            while (!taggedEntries.Aggregate(true, (b, b1) => b && b1)) {
                 bool done = false;
                 while (!done) {
                     for (int i = 0; i < cycleArray.Length; i++) {
