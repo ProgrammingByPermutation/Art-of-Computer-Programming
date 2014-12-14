@@ -52,13 +52,13 @@ namespace Fundamental_Algorithms.Basic_Concepts
             char START = default(char), CURRENT = default(char);
             bool doA2 = true, doA3 = true;
 
-            // A2. Searching from left to right, find the first untagged element of the input.
-            // (If all elements are tagged, the algorithm terminates.) 
+            // A2. (If all elements are tagged, the algorithm terminates.) 
             while (!taggedEntries.Aggregate(true, (b, b1) => b && b1)) {
                 bool scanningFormula = true;
                 while (scanningFormula) {
                     for (int i = 0; i < cycleArray.Length; i++) {
-                        // A2. Set START equal to it; output a left parenthesis; output the element; and tag it.
+                        // A2. Searching from left to right, find the first untagged element of the input.
+                        // Set START equal to it; output a left parenthesis; output the element; and tag it.
                         if (doA2) {
                             if (taggedEntries[i]) {
                                 continue;
