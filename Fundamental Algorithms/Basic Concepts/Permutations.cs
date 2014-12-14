@@ -7,8 +7,44 @@ namespace Fundamental_Algorithms.Basic_Concepts
     /// <summary>
     /// A class of algorithms relating to permutations.
     /// </summary>
-    public class Permutations
+    public class Permutation
     {
+        /// <summary>
+        /// The permutation in cycle form. Ex: (abc)(de)(fg)
+        /// </summary>
+        public string CycleForm { get; private set; }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="cycleForm">The permutation in cycle form. Ex: (abc)(de)(fg)</param>
+        public Permutation(string cycleForm) {
+            if (string.IsNullOrWhiteSpace(cycleForm)) {
+                throw new NullReferenceException("Error permutation's cycle form cannot be null or empty.");
+            }
+
+            if (!cycleForm.StartsWith("(") || !cycleForm.EndsWith(")")) {
+                throw new FormatException("Error permutation's cycle form must begin and end with parenthesis.");
+            }
+
+            CycleForm = cycleForm;
+        }
+
+        /// <summary>
+        /// Multiplies two permutations.
+        /// </summary>
+        /// <param name="left">The left hand permutation.</param>
+        /// <param name="right">The right hand permutation.</param>
+        /// <returns>The product of the permutations.</returns>
+        public static Permutation operator *(Permutation left, Permutation right) {
+            if (null == left || string.IsNullOrWhiteSpace(left.CycleForm) ||
+                null == right || string.IsNullOrWhiteSpace(right.CycleForm)) {
+                return null;
+            }
+
+            return new Permutation(Multiply(left.CycleForm.Trim() + right.CycleForm.Trim()));
+        }
+
         /// <summary>
         /// Multiplies a permutation in cycle form.
         /// </summary>
@@ -108,6 +144,108 @@ namespace Fundamental_Algorithms.Basic_Concepts
             }
 
             return new string(output.ToArray());
+        }
+
+        /// <summary>
+        /// Returns the inverse of a permutation.
+        /// </summary>
+        /// <param name="intArray">The array to invert.</param>
+        /// <returns>The inverted array, null if unsuccessful.</returns>
+        public static int[] InverseIntArrayI(int[] intArray) {
+            // Sanity check
+            if (null == intArray || intArray.Length == 0) {
+                return null;
+            }
+
+            // Algorithm uses a 1 based index
+            int[] X = new int[intArray.Length + 1];
+            Array.Copy(intArray, 0, X, 1, intArray.Length);
+
+            // I1. [Initialize] Set m <- n, j <- -1
+            int j = -1;
+
+            // I6. Loop on m
+            for (int m = X.Length - 1; m >= 0; m--) {
+                // I2. [Next Element] Set i <- X[m]. If i < 0, go to step I5 (the element
+                // has already been processed).
+                int i = X[m];
+                bool doI5 = i < 0;
+
+                if (!doI5) {
+                    // I3. Set X[m] <- j, j <- -m, m <- i, i <- X[m]
+                    bool doI3 = true;
+                    while (doI3) {
+                        doI3 = false;
+                        X[m] = j;
+                        j = -m;
+                        m = i;
+                        i = X[m];
+
+                        // I4. If i > 0, go back to I3 (the cycle has not ended);
+                        // otherwise set i <- j
+                        if (i > 0) {
+                            doI3 = true;
+                        }
+                        else {
+                            i = j;
+                        }
+                    }
+                }
+
+                // I5. Set X[m] <- -i
+                X[m] = -i;
+            }
+
+            // Convert back to zero based index
+            Array.Copy(X, 1, intArray, 0, intArray.Length);
+            return intArray;
+        }
+
+        /// <summary>
+        /// Returns the inverse of a permutation.
+        /// </summary>
+        /// <param name="intArray">The array to invert.</param>
+        /// <returns>The inverted array, null if unsuccessful.</returns>
+        public static int[] InverseIntArrayJ(int[] intArray) {
+            // Sanity check
+            if (null == intArray || intArray.Length == 0) {
+                return null;
+            }
+
+            // Algorithm uses a 1 based index
+            int[] X = new int[intArray.Length + 1];
+            Array.Copy(intArray, 0, X, 1, intArray.Length);
+
+            // J1. Set X[k] <- -X[k], for 1 <= k <= n. Also set m <- n.
+            for (int z = 0; z < X.Length; z++) {
+                X[z] = -X[z];
+            }
+
+            // J5. Decrease m by 1 if m > 0 go back to J2. Otherwise the algorithm terminates.
+            for (int m = X.Length - 1; m >= 0; m--) {
+                // J2. Initialize j
+                int j = m;
+
+                // J3. Set i <- X[j]. If i > 0, set j <- i and repeat this step.
+                int i;
+                while (true) {
+                    i = X[j];
+                    if (i > 0) {
+                        j = i;
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                // J4. Set X[j] <- X[-i], X[-i] <- m
+                X[j] = X[-i];
+                X[-i] = m;
+            }
+
+            // Convert back to zero based index
+            Array.Copy(X, 1, intArray, 0, intArray.Length);
+            return intArray;
         }
     }
 }
