@@ -30,8 +30,7 @@ namespace Fundamental_Algorithms.Information_Structures
         /// Traverse the right subtree
         /// </summary>
         /// <param name="action">The action to perform that currently visited node.</param>
-        /// <param name="exitFunc">The action that determines if the traversal should be aborted.</param>
-        public void TraverseInorder(Action<BinaryTreeNode<T>> action, Func<BinaryTreeNode<T>, bool> exitFunc = null) {
+        public void TraverseInorder(Action<BinaryTreeNode<T>> action) {
             if (null == action) {
                 return;
             }
